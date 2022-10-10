@@ -24,11 +24,10 @@ class ResultAPIView(views.APIView):
         sum_of_income = sum(IncomeExpense.objects.filter(is_expenses=True, user=request.user).values_list('amount', flat=True))
         sum_of_expense = sum(IncomeExpense.objects.filter(is_expenses=False, user=request.user).values_list('amount', flat=True))
         result = sum_of_income - sum_of_expense
-        return Response(
-                (
-                    f'сумма расходов : {sum_of_expense}, '
-                    f'сумма доходов : {sum_of_income}, '
-                    f'результат : {result}'
-                ),
-                status=200
-            )
+        response_data = {
+            'сумма расходов': sum_of_expense,
+            'сумма доходов': sum_of_income,
+            'результат': result
+
+        }
+        return Response(response_data, status=200)
